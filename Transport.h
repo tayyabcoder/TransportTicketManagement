@@ -8,18 +8,16 @@ using namespace std;
 
 
 class Bus {
-	private:
+	public:
 		int bookedSeatsIndex=0;
 		int bookedSeats[50];
-	protected:
 		int totalAvailableSeats;
 		int busNumber;
+		int busType;
 
 		int getBookedSeatsCount() {
 			return bookedSeatsIndex+1;
 		}
-
-	public:
 		Bus() {
 
 		}
@@ -111,7 +109,8 @@ class PremiumBus:public Bus {
 			return 1100;
 		}
 		int getBusType() {
-			return 0;
+			busType=0;
+			return busType;
 		}
 };
 
@@ -124,7 +123,8 @@ class PresidentCruise:public Bus {
 			return 2200;
 		}
 		int getBusType() {
-			return 1;
+			busType=1;
+			return busType;
 		}
 };
 
@@ -150,20 +150,43 @@ Bus createNewBus() {
 		PresidentCruise b(busNumber);
 		pBus=&b;
 	}
+	//writing into file
+	fstream wrt;
+	wrt.open("TRANSPPORT_DATA.dat",ios::out|ios::app);
+	wrt.write((char*)pBus,sizeof(Bus));
+	wrt.close(); //finished writing
 	return *pBus;
 }
 
-void showAllBuses(){
+void showAllBuses() {
+	Bus *pBus =new Bus();
 	cout<<"Bus number\t\tBus Type"<<endl;
-	cout<<100<<"\t"<<"Premium Cruise"<<endl;
-	cout<<101<<"\t"<<"President Cruise"<<endl;
-	cout<<102<<"\t"<<"President Cruise"<<endl;
-	cout<<103<<"\t"<<"Premium Cruise"<<endl;
+	fstream file;
+	file.open("TRANSPPORT_DATA.dat");
+	while(file.read((char*)pBus,sizeof(Bus))) {
+		string busType="";
+		if(pBus->busType==0){
+			busType="Premium Cruise";
+		}
+		else if(pBus->busType==1){
+			busType="President Cruise";
+		}
+		cout<<pBus->busNumber<<"\t"<<busType<<endl;
+	}
+	file.close();
 }
 
-Bus getBusByBusNumber(int busNumber){
-			Bus *pBus =new PremiumBus(busNumber);
-			return *pBus;
+Bus getBusByBusNumber(int busNumber) {
+	Bus *pBus;
+	fstream file;
+	file.open("TRANSPPORT_DATA.dat");
+	while(file.read((char*)pBus,sizeof(Bus))) {
+		if(pBus->getBusNumber()==busNumber){
+			break;
 		}
+	}
+	file.close();
+	return *pBus;
+}
 
 

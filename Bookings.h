@@ -7,12 +7,11 @@
 using namespace std;
 
 class Schedule {
-	private:
+	public:
 		Bus bus;
 		int day, month, year, depHour, depMin, arHour, arMin;
 		int discount;
 		string fromCity, toCity;
-	public:
 		Schedule() {
 
 		}
@@ -59,12 +58,11 @@ class Schedule {
 };
 
 class Booking {
-	private:
+	public:
 		Rider rider;
 		Schedule schedule;
 		int seatNumbers[10];
 		int arrLength;
-	public:
 		Booking(Rider rider, Schedule schedule, int* seatNumbers, int arrLength) {
 			this->rider=rider;
 			this->schedule=schedule;
@@ -133,8 +131,14 @@ Schedule CreateNewSchedule(Bus* buses, int arrLength) {
 	cout<<"Please Enter discount on the ride: ";
 	cin>>discount;
 
-	Schedule s(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
-	return s;
+	Schedule *s=new Schedule(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
+	
+	//writing into file
+	fstream wrt;
+	wrt.open("SCHEDULE_DATA.dat",ios::out|ios::app);
+	wrt.write((char*)s,sizeof(Schedule));
+	wrt.close(); //finished writing
+	return *s;
 }
 
 Schedule CreateNewSchedule(Bus bus) {
@@ -154,8 +158,13 @@ Schedule CreateNewSchedule(Bus bus) {
 	cout<<"Please Enter discount on the ride: ";
 	cin>>discount;
 
-	Schedule s(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
-	return s;
+	Schedule *s=new Schedule(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
+	//writing into file
+	fstream wrt;
+	wrt.open("SCHEDULE_DATA.dat",ios::out|ios::app);
+	wrt.write((char*)s,sizeof(Schedule));
+	wrt.close(); //finished writing
+	return *s;
 }
 
 void showBusSchedules() {
@@ -177,7 +186,12 @@ Schedule getSchedule(int optionNumber) {
 }
 
 Booking bookSeats(Schedule schedule, Rider rider,int *pSeats, int arrLength) {
-	Booking b(rider,schedule, pSeats, arrLength);
-	return b;
+	Booking *b=new Booking(rider,schedule, pSeats, arrLength);
+	//writing into file
+	fstream wrt;
+	wrt.open("BOOKING_DATA.dat",ios::out|ios::app);
+	wrt.write((char*)b,sizeof(Booking));
+	wrt.close(); //finished writing
+	return *b;
 }
 

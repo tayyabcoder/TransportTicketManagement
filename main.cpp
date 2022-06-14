@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 					showLoadingDots(5);
 					cout<<endl;
 					cout<<"Available Buses:"<<endl<<endl;
-					showAllBuses();
+					showBusSchedules();
 					cout<<"Please enter the desired option number: ";
 					cin>>optionNumber;
 					cout<<"Loading available seats";

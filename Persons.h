@@ -5,10 +5,9 @@
 using namespace std;
 
 class Person {
-	private:
+	public:
 		string firstName, lastName, cnic, mobileNumber, email;
 		int gender; //0 Female and 1 for male
-	public:
 		string getFristName() {
 			return firstName;
 		}
@@ -48,9 +47,8 @@ class Person {
 };
 
 class Rider:public Person {
-	private:
-		string startCity, destinationCity;
 	public:
+		string startCity, destinationCity;
 		string getStartCity() {
 			return startCity;
 		}
@@ -98,5 +96,14 @@ Rider CreateNewRider() {
 	r.setMobileNumber(mobileNumber);
 	r.setStartCity(startCity);
 	r.setGender(gender);
+	
+	Rider *pRider=&r;
+	
+	//writing into file
+	fstream wrt;
+	wrt.open("PERSON_DATA.dat",ios::out|ios::app);
+	wrt.write((char*)pRider,sizeof(Rider));
+	wrt.close(); //finished writing
+	
 	return r;
 }
