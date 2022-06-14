@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 							cout<<"Press 0 to go back"<<endl;
 							cin>>menu2;
 							system("CLS");
-							if(menu2==1){
+							if(menu2==1) {
 								//Add with new bus
 								Bus bus=createNewBus();
 								cout<<"Adding new bus";
@@ -45,8 +45,7 @@ int main(int argc, char** argv) {
 								showLoadingDots(3);
 								cout<<endl;
 								waitAnyKey();
-							}
-							else if(menu2==2){
+							} else if(menu2==2) {
 								//add with existing bus
 								int busNumber;
 								cout<<"Loading all available buses";
@@ -72,7 +71,6 @@ int main(int argc, char** argv) {
 					showValidOptionError(menu,0,1);
 				} while(menu!=0);
 			}
-
 		} else if(role==2) {
 			//Rider/user
 			int menu;
@@ -80,6 +78,15 @@ int main(int argc, char** argv) {
 				cout<<"Press 1 to Book a Bus"<<endl;
 				cout<<"Press 0 to go back"<<endl;
 				cin>>menu;
+				system("CLS");
+				if(menu==1) {
+					//Book a ride
+					Rider rider=CreateNewRider();
+					cout<<"Please wait we are searching the options for you";
+					showLoadingDots(5);
+					cout<<endl;
+					waitAnyKey();
+				}
 				system("CLS");
 				showValidOptionError(menu,0,1);
 			} while(menu!=0);

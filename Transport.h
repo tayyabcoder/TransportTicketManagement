@@ -154,7 +154,7 @@ Bus createNewBus() {
 }
 
 void showAllBuses(){
-	cout<<"Bus number\tBus Type"<<endl;
+	cout<<"Bus number\t\tBus Type"<<endl;
 	cout<<100<<"\t"<<"Premium Cruise"<<endl;
 	cout<<101<<"\t"<<"President Cruise"<<endl;
 	cout<<102<<"\t"<<"President Cruise"<<endl;
