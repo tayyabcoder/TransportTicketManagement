@@ -13,8 +13,8 @@ class Schedule {
 		int discount;
 		string fromCity, toCity;
 	public:
-		Schedule(){
-			
+		Schedule() {
+
 		}
 		Schedule(Bus bus, int day, int month, int year, int depHour, int depMin, int arHour, int arMin, string fromCity, string toCity) {
 			this->arHour=arHour;
@@ -53,6 +53,9 @@ class Schedule {
 		string getToCity() {
 			return toCity;
 		}
+		int getDiscount() {
+			return discount;
+		}
 };
 
 class Booking {
@@ -60,12 +63,15 @@ class Booking {
 		Rider rider;
 		Schedule schedule;
 		int seatNumbers[10];
+		int arrLength;
 	public:
-		Booking(Rider rider, Schedule schedule, int seatNumbers[]) {
+		Booking(Rider rider, Schedule schedule, int* seatNumbers, int arrLength) {
 			this->rider=rider;
 			this->schedule=schedule;
-			for(int i=0; i<10; i++){
-				this->seatNumbers[i]=seatNumbers[i];
+			this->arrLength=arrLength;
+			for(int i=0; i<arrLength; i++) {
+				this->seatNumbers[i]=*seatNumbers;
+				seatNumbers++;
 			}
 		}
 		Rider getRider() {
@@ -74,11 +80,23 @@ class Booking {
 		Schedule getSchedule() {
 			return schedule;
 		}
+		int getArrLength() {
+			return arrLength;
+		}
 		void getSeatNumbers() {
-			for(int i=0; i<10; i++){
+			for(int i=0; i<10; i++) {
 				cout<<seatNumbers[i];
 			}
 			cout<<endl;
+		}
+		int getTotalFare() {
+			return schedule.getBus().getFare()*arrLength;
+		}
+		int getTotalDiscount() {
+			return schedule.getDiscount()*arrLength;
+		}
+		int getGrandTotal() {
+			return getTotalFare()-getTotalDiscount();
 		}
 };
 
@@ -139,3 +157,27 @@ Schedule CreateNewSchedule(Bus bus) {
 	Schedule s(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
 	return s;
 }
+
+void showBusSchedules() {
+	cout<<"Option no.\t\t"<<"Bus Route\t\t\t"<<"Bus Type\t\t"<<"Date\t\t\t"<<"Departure Time\t"<<"Arrival Time\t"<<"Fare\t\t\t"<<"Discount\t\t"<<"Total"<<endl;
+	cout<<"1\t\t\t"<<"Lahore to Islamabad\t"<<"Premium\t"<<"15/6/2022\t"<<"14:30\t\t"<<"15:00\t\t"<<"1100\t\t\t"<<"100\t\t"<<"1000"<<endl;
+	cout<<"2\t\t\t"<<"Lahore to Multan\t"<<"President\t"<<"15/6/2022\t"<<"15:00\t\t"<<"18:24\t\t"<<"1700\t\t\t"<<"200\t\t"<<"1500"<<endl;
+	cout<<"3\t\t\t"<<"Islamabad to Peshawar\t"<<"Premium\t"<<"15/6/2022\t"<<"18:24\t\t"<<"22:30\t"<<"1100\t\t\t"<<"0\t\t"<<"1100"<<endl;
+	cout<<"4\t\t\t"<<"Rawalpindi to Muzafarabad\t"<<"President\t"<<"15/6/2022\t"<<"12:10\t\t"<<"6:20\t"<<"1800\t\t\t"<<"230\t\t"<<"1570"<<endl;
+}
+
+int getNextOptionNumber() {
+	static int number=0;
+	return ++number;
+}
+
+Schedule getSchedule(int optionNumber) {
+	Schedule s(getBusByBusNumber(100), 14, 6, 2022, 15, 30, 22, 30, "Lahore", "Islamabad");
+	return s;
+}
+
+Booking bookSeats(Schedule schedule, Rider rider,int *pSeats, int arrLength) {
+	Booking b(rider,schedule, pSeats, arrLength);
+	return b;
+}
+
