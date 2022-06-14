@@ -118,3 +118,24 @@ Schedule CreateNewSchedule(Bus* buses, int arrLength) {
 	Schedule s(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
 	return s;
 }
+
+Schedule CreateNewSchedule(Bus bus) {
+	int day, month, year, depHour, depMin, arHour, arMin;
+	int discount, busNumber;
+	string fromCity, toCity;
+	cout<<"Please enter departure city: ";
+	cin>>fromCity;
+	cout<<"Please enter destination city: ";
+	cin>>toCity;
+	cout<<"Please Enter date of departure (dd MM yyyy): ";
+	cin>>day>>month>>year;
+	cout<<"Please Enter time of deaparture (HH mm): ";
+	cin>>depHour>>depMin;
+	cout<<"Please Enter time of arrival at the destination (HH mm): ";
+	cin>>arHour>>arMin;
+	cout<<"Please Enter discount on the ride: ";
+	cin>>discount;
+
+	Schedule s(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
+	return s;
+}
