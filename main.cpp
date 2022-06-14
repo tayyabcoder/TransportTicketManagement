@@ -25,6 +25,15 @@ int main(int argc, char** argv) {
 					cout<<"Press 0 to go back"<<endl;
 					cin>>menu;
 					system("CLS");
+					if(menu==1){
+						//Add Bus
+					}
+					else if(menu==2){
+						//View all Buses
+					}
+					else if(menu==3){
+						//Schedule Bus
+					}
 					if(menu<0 || menu>3)
 						cout<<"Error: Please Enter a Valid Option"<<endl;
 				} while(menu!=0);
