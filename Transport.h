@@ -21,7 +21,7 @@ class Bus {
 		Bus() {
 
 		}
-		Bus(int busNumber, int totalAvailableSeats) {
+ 		Bus(int busNumber, int totalAvailableSeats) {
 			this->busNumber=busNumber;
 			this->totalAvailableSeats=totalAvailableSeats;
 		}
@@ -103,13 +103,12 @@ class Bus {
 class PremiumBus:public Bus {
 	public:
 		PremiumBus(int busNumber):Bus(busNumber,50) {
-
+			busType=0;
 		}
 		int getFare() {
 			return 1100;
 		}
 		int getBusType() {
-			busType=0;
 			return busType;
 		}
 };
@@ -117,13 +116,12 @@ class PremiumBus:public Bus {
 class PresidentCruise:public Bus {
 	public:
 		PresidentCruise(int busNumber):Bus(busNumber,45) {
-
+			busType=1;
 		}
 		int getFare() {
 			return 2200;
 		}
 		int getBusType() {
-			busType=1;
 			return busType;
 		}
 };
@@ -161,29 +159,29 @@ Bus createNewBus() {
 void showAllBuses() {
 	Bus *pBus =new Bus();
 	cout<<"Bus number\t\tBus Type"<<endl;
+	//reading from file
 	fstream file;
 	file.open("TRANSPPORT_DATA.dat");
 	while(file.read((char*)pBus,sizeof(Bus))) {
 		string busType="";
-		if(pBus->busType==0){
+		if(pBus->busType==0) {
 			busType="Premium Cruise";
-		}
-		else if(pBus->busType==1){
+		} else if(pBus->busType==1) {
 			busType="President Cruise";
 		}
-		cout<<pBus->busNumber<<"\t"<<busType<<endl;
+		cout<<pBus->busNumber<<"\t\t\t"<<busType<<endl;
 	}
 	file.close();
 }
 
 Bus getBusByBusNumber(int busNumber) {
-	Bus *pBus;
+	Bus *pBus=new Bus();
+	//reading from file
 	fstream file;
 	file.open("TRANSPPORT_DATA.dat");
-	while(file.read((char*)pBus,sizeof(Bus))) {
-		if(pBus->getBusNumber()==busNumber){
+	while(file.read((char*)pBus, sizeof(Bus))) {
+		if(pBus->busNumber==busNumber)
 			break;
-		}
 	}
 	file.close();
 	return *pBus;

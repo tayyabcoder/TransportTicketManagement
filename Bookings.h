@@ -10,7 +10,7 @@ class Schedule {
 	public:
 		Bus bus;
 		int day, month, year, depHour, depMin, arHour, arMin;
-		int discount;
+		int discount, optionId;
 		string fromCity, toCity;
 		Schedule() {
 
@@ -45,6 +45,32 @@ class Schedule {
 		}
 		int getDepartureMinute() {
 			return depMin;
+		}
+		int getOptionNumber() {
+			return optionId;
+		}
+		int setOptionNumber() {
+			int n=1;
+			int *pN=&n;
+			int number;
+
+			//reading from file
+			fstream file;
+			file.open("OPTION_NUMBERS.dat");
+			while(file.read((char*)pN,sizeof(int))) {
+				number=*pN;
+			}
+			file.close();
+			number++;
+			optionId=number;
+			n=number;
+			//writing into file
+			fstream wrt;
+			wrt.open("OPTION_NUMBERS.dat",ios::out|ios::app);
+			wrt.write((char*)pN,sizeof(int));
+			wrt.close(); //finished writing
+
+			return number;
 		}
 		string getFromCity() {
 			return fromCity;
@@ -132,7 +158,8 @@ Schedule CreateNewSchedule(Bus* buses, int arrLength) {
 	cin>>discount;
 
 	Schedule *s=new Schedule(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
-	
+	s->setOptionNumber();
+
 	//writing into file
 	fstream wrt;
 	wrt.open("SCHEDULE_DATA.dat",ios::out|ios::app);
@@ -159,6 +186,7 @@ Schedule CreateNewSchedule(Bus bus) {
 	cin>>discount;
 
 	Schedule *s=new Schedule(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
+	s->setOptionNumber();
 	//writing into file
 	fstream wrt;
 	wrt.open("SCHEDULE_DATA.dat",ios::out|ios::app);
@@ -168,12 +196,48 @@ Schedule CreateNewSchedule(Bus bus) {
 }
 
 void showBusSchedules() {
-	cout<<"Option no.\t\t"<<"Bus Route\t\t\t"<<"Bus Type\t\t"<<"Date\t\t\t"<<"Departure Time\t"<<"Arrival Time\t"<<"Fare\t\t\t"<<"Discount\t\t"<<"Total"<<endl;
-	cout<<"1\t\t\t"<<"Lahore to Islamabad\t"<<"Premium\t"<<"15/6/2022\t"<<"14:30\t\t"<<"15:00\t\t"<<"1100\t\t\t"<<"100\t\t"<<"1000"<<endl;
-	cout<<"2\t\t\t"<<"Lahore to Multan\t"<<"President\t"<<"15/6/2022\t"<<"15:00\t\t"<<"18:24\t\t"<<"1700\t\t\t"<<"200\t\t"<<"1500"<<endl;
-	cout<<"3\t\t\t"<<"Islamabad to Peshawar\t"<<"Premium\t"<<"15/6/2022\t"<<"18:24\t\t"<<"22:30\t"<<"1100\t\t\t"<<"0\t\t"<<"1100"<<endl;
-	cout<<"4\t\t\t"<<"Rawalpindi to Muzafarabad\t"<<"President\t"<<"15/6/2022\t"<<"12:10\t\t"<<"6:20\t"<<"1800\t\t\t"<<"230\t\t"<<"1570"<<endl;
+	Schedule *pSchedule= new Schedule();
+	cout<<"Option no.\t\t"<<"Bus Route\t\t\t"<<"Bus Type\t\t"<<"Date\t"<<"Departure Time\t"<<"Arrival Time\t"<<"Fare\t\t"<<"Discount\t\t"<<"Total"<<endl;
+	//reading from file
+	fstream file;
+	file.open("SCHEDULE_DATA.dat");
+	while(file.read((char*)pSchedule,sizeof(Schedule))) {
+		string busType="";
+		if(pSchedule->getBus().busType==0) {
+			busType="Premium Cruise";
+		} else if(pSchedule->getBus().busType==1) {
+			busType="President Cruise";
+		}
+		cout<<pSchedule->optionId<<"\t\t\t"<<pSchedule->getFromCity()<<" to "<<pSchedule->getToCity()<<" \t"<<busType<<"\t"<<pSchedule->day<<"/"<<pSchedule->month<<"/"<<pSchedule->year<<"\t"<<pSchedule->depHour<<":"<<pSchedule->depMin<<"\t\t"<<pSchedule->arHour<<":"<<pSchedule->arMin<<"\t\t"<<pSchedule->bus.getFare()<<"\t\t\t"<<pSchedule->discount<<"\t\t"<<pSchedule->bus.getFare()+pSchedule->discount<<endl;
+	}
+	file.close();
 }
+
+void showBusSchedules(string fromCity, string toCity) {
+	Schedule *pSchedule= new Schedule();
+	cout<<"Option no.\t\t"<<"Bus Route\t\t\t"<<"Bus Type\t\t"<<"Date\t"<<"Departure Time\t"<<"Arrival Time\t"<<"Fare\t\t"<<"Discount\t\t"<<"Total"<<endl;
+	//reading from file
+	fstream file;
+	file.open("SCHEDULE_DATA.dat");
+	while(file.read((char*)pSchedule,sizeof(Schedule))) {
+		try {
+			if(pSchedule->fromCity==fromCity && pSchedule->toCity==toCity) {
+				string busType="";
+				if(pSchedule->getBus().busType==0) {
+					busType="Premium Cruise";
+				} else if(pSchedule->getBus().busType==1) {
+					busType="President Cruise";
+				}
+				cout<<pSchedule->optionId<<"\t\t\t"<<pSchedule->fromCity<<" to "<<pSchedule->toCity<<" \t"<<busType<<"\t"<<pSchedule->day<<"/"<<pSchedule->month<<"/"<<pSchedule->year<<"\t"<<pSchedule->depHour<<":"<<pSchedule->depMin<<"\t\t"<<pSchedule->arHour<<":"<<pSchedule->arMin<<"\t\t"<<pSchedule->bus.getFare()<<"\t\t\t"<<pSchedule->discount<<"\t\t"<<pSchedule->bus.getFare()+pSchedule->discount<<endl;
+			}
+		} catch(...) {
+		}
+
+	}
+	file.close();
+}
+
+
 
 int getNextOptionNumber() {
 	static int number=0;
@@ -181,8 +245,15 @@ int getNextOptionNumber() {
 }
 
 Schedule getSchedule(int optionNumber) {
-	Schedule s(getBusByBusNumber(100), 14, 6, 2022, 15, 30, 22, 30, "Lahore", "Islamabad");
-	return s;
+	Schedule *pSchedule=new Schedule();
+	fstream file;
+	file.open("SCHEDULE_DATA.dat");
+	while(file.read((char*)pSchedule, sizeof(Schedule))) {
+		if(pSchedule->optionId==optionNumber)
+			break;
+	}
+	file.close();
+	return *pSchedule;
 }
 
 Booking bookSeats(Schedule schedule, Rider rider,int *pSeats, int arrLength) {
