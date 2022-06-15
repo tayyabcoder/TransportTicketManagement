@@ -14,6 +14,7 @@ class Bus {
 		int totalAvailableSeats;
 		int busNumber;
 		int busType;
+		int fare;
 
 		int getBookedSeatsCount() {
 			return bookedSeatsIndex+1;
@@ -21,7 +22,7 @@ class Bus {
 		Bus() {
 
 		}
- 		Bus(int busNumber, int totalAvailableSeats) {
+		Bus(int busNumber, int totalAvailableSeats) {
 			this->busNumber=busNumber;
 			this->totalAvailableSeats=totalAvailableSeats;
 		}
@@ -104,11 +105,11 @@ class PremiumBus:public Bus {
 	public:
 		PremiumBus(int busNumber):Bus(busNumber,50) {
 			busType=0;
+			fare=1700;
 		}
 		int getFare() {
-			return 1100;
-		}
-		int getBusType() {
+			return fare;
+		} int getBusType() {
 			return busType;
 		}
 };
@@ -117,9 +118,10 @@ class PresidentCruise:public Bus {
 	public:
 		PresidentCruise(int busNumber):Bus(busNumber,45) {
 			busType=1;
+			fare=2200;
 		}
 		int getFare() {
-			return 2200;
+			return fare;
 		}
 		int getBusType() {
 			return busType;

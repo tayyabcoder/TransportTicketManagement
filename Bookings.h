@@ -15,7 +15,7 @@ class Schedule {
 		Schedule() {
 
 		}
-		Schedule(Bus bus, int day, int month, int year, int depHour, int depMin, int arHour, int arMin, string fromCity, string toCity) {
+		Schedule(Bus bus, int day, int month, int year, int depHour, int depMin, int arHour, int arMin, int discount, string fromCity, string toCity) {
 			this->arHour=arHour;
 			this->arMin=arMin;
 			this->bus=bus;
@@ -157,7 +157,7 @@ Schedule CreateNewSchedule(Bus* buses, int arrLength) {
 	cout<<"Please Enter discount on the ride: ";
 	cin>>discount;
 
-	Schedule *s=new Schedule(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
+	Schedule *s=new Schedule(bus, day, month, year, depHour, depMin, arHour, arMin, discount,fromCity, toCity);
 	s->setOptionNumber();
 
 	//writing into file
@@ -185,7 +185,7 @@ Schedule CreateNewSchedule(Bus bus) {
 	cout<<"Please Enter discount on the ride: ";
 	cin>>discount;
 
-	Schedule *s=new Schedule(bus, day, month, year, depHour, depMin, arHour, arMin, fromCity, toCity);
+	Schedule *s=new Schedule(bus, day, month, year, depHour, depMin, arHour,arMin,discount, fromCity, toCity);
 	s->setOptionNumber();
 	//writing into file
 	fstream wrt;
