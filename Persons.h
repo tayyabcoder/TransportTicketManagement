@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
+using namespTace std;
 
 class Person {
 	public:
